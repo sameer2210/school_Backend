@@ -12,4 +12,8 @@ CREATE TABLE IF NOT EXISTS schools (
 );
 
 -- Helpful index for geo-queries
-CREATE INDEX IF NOT EXISTS idx_schools_lat_lon ON schools (latitude, longitude);
+-- CREATE INDEX IF NOT EXISTS idx_schools_lat_lon ON schools (latitude, longitude);
+
+-- Create an index on latitude & longitude for faster distance queries
+CREATE INDEX idx_schools_lat_lon ON schools (latitude, longitude);
+
