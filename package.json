@@ -1,5 +1,5 @@
 {
-  "name": "school-apis-starter",
+  "name": "school_B",
   "version": "1.0.0",
   "description": "Node.js + Express + MySQL School APIs (addSchool, listSchools) with validation and Postman collection.",
   "main": "src/server.js",

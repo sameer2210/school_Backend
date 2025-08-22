@@ -1,12 +1,9 @@
 import { pool } from '../db.js';
 import { addSchoolSchema, listSchoolsSchema } from '../validators/school.validator.js';
 
-/**
- * POST /addSchool
- */
+/** POST /addSchool */
 export const addSchool = async (req, res) => {
   try {
-    // Validate input
     const { value, error } = addSchoolSchema.validate(req.body, { abortEarly: false });
     if (error) {
       return res.status(400).json({
@@ -26,6 +23,7 @@ export const addSchool = async (req, res) => {
     return res.status(201).json({
       success: true,
       message: 'School added successfully',
+      // @ts-ignore
       data: { id: result.insertId, name, address, latitude, longitude },
     });
   } catch (err) {
@@ -34,16 +32,12 @@ export const addSchool = async (req, res) => {
   }
 };
 
-/**
- * GET /listSchools?latitude=..&longitude=..&limit=100
- * Uses Haversine formula to sort schools by proximity
- */
+/** GET /listSchools?latitude=..&longitude=..&limit=100 */
 export const listSchools = async (req, res) => {
   try {
-    // Validate query parameters
     const { value, error } = listSchoolsSchema.validate(req.query, {
       abortEarly: false,
-      convert: true, // ensures numbers are converted
+      convert: true,
     });
     if (error) {
       return res.status(400).json({
@@ -53,16 +47,9 @@ export const listSchools = async (req, res) => {
       });
     }
 
-    let { latitude, longitude, limit } = value;
-
-    // Ensure numbers
-    latitude = parseFloat(latitude);
-    longitude = parseFloat(longitude);
-    const parsedLimit = parseInt(limit, 10) || 100; // default 100
-
-    if (isNaN(latitude) || isNaN(longitude)) {
-      return res.status(400).json({ success: false, message: 'Invalid latitude or longitude' });
-    }
+    const latitude = Number(value.latitude);
+    const longitude = Number(value.longitude);
+    const parsedLimit = Number.parseInt(value.limit, 10);
 
     const sql = `
       SELECT
@@ -71,14 +58,13 @@ export const listSchools = async (req, res) => {
           COS(RADIANS(?)) * COS(RADIANS(latitude)) *
           COS(RADIANS(longitude) - RADIANS(?)) +
           SIN(RADIANS(?)) * SIN(RADIANS(latitude))
-        )) AS distance_km
+        )) AS distance
       FROM schools
-      ORDER BY distance_km ASC
-      LIMIT ?;
+      ORDER BY distance ASC
+      LIMIT ${parsedLimit};
     `;
 
-    const params = [latitude, longitude, latitude, parsedLimit];
-
+    const params = [latitude, longitude, latitude];
     const [rows] = await pool.execute(sql, params);
 
     return res.json({
