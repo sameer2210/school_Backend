@@ -23,7 +23,6 @@ export const addSchool = async (req, res) => {
     return res.status(201).json({
       success: true,
       message: 'School added successfully',
-      // @ts-ignore
       data: { id: result.insertId, name, address, latitude, longitude },
     });
   } catch (err) {
