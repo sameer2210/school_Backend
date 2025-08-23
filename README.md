@@ -37,9 +37,11 @@ Server will start at `http://localhost:3000`
 
 
 ## 3) Postman
-Import `postman/SchoolAPIs.postman_collection.json` and use the two ready requests:
-- Add School (POST)
-- List Schools (GET)
+Import `postman/SchoolAPIs.postman_collection.json` and use for testing
+the two ready requests:
+
+- Add School (POST)  https://school-backend-5jnt.onrender.com/addSchool
+- List Schools (GET)  https://school-backend-5jnt.onrender.com/listSchools?latitude=23.45&longitude=77.67&limit=5
 
 
 ## 4) Endpoints

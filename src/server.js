@@ -4,7 +4,6 @@ dotenv.config();
 import app from './app.js';
 import { pool } from './db.js';
 
-// Use the port provided by Render (or 3000 locally)
 // const PORT = process.env.PORT || 3000;
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
 

@@ -1,4 +1,4 @@
-import Joi from 'joi';
+import Joi from 'joi';                                          //schema validation library
 
 export const addSchoolSchema = Joi.object({
   name: Joi.string().trim().min(2).max(255).required(),
