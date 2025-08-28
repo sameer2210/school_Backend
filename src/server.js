@@ -13,7 +13,6 @@ const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
     await pool.query('SELECT 1');
     console.log('Database connected successfully');
 
-    // Start Express server
     app.listen(PORT, '0.0.0.0', () => {
       console.log(`Server running on port ${PORT}`);
     });

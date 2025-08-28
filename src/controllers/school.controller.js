@@ -48,7 +48,7 @@ export const listSchools = async (req, res) => {
 
     const latitude = Number(value.latitude);
     const longitude = Number(value.longitude);
-    const parsedLimit = Number.parseInt(value.limit, 10);
+    const limit = Number.parseInt(value.limit, 10);
 
     const sql = `
       SELECT
@@ -60,10 +60,10 @@ export const listSchools = async (req, res) => {
         )) AS distance
       FROM schools
       ORDER BY distance ASC
-      LIMIT ${parsedLimit};
+      LIMIT ?;
     `;
 
-    const params = [latitude, longitude, latitude];
+    const params = [latitude, longitude, latitude, limit];
     const [rows] = await pool.execute(sql, params);
 
     return res.json({
