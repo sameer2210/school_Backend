@@ -2,7 +2,7 @@
   "info": {
     "name": "School APIs",
     "_postman_id": "f0e8b339-a111-4d1e-9b8c-0000schoolapis",
-    "description": "Add School and List Schools sorted by proximity.",
+    "description": "Add School, List Schools sorted by proximity, and Show Schools.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -14,7 +14,7 @@
         "url": { "raw": "{{baseUrl}}/addSchool", "host": ["{{baseUrl}}"], "path": ["addSchool"] },
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"name\": \"ABC Public School\",\n  \"address\": \"123 Main Street\",\n  \"latitude\": 23.45,\n  \"longitude\": 77.67\n}"
+          "raw": "{\n  \"name\": \"ABC Public School\",\n  \"address\": \"123 Main Street\",\n  \"latitude\": 23.45,\n  \"longitude\": 77.67,\n  \"city\": \"Bhopal\",\n  \"state\": \"MP\",\n  \"contact\": 1234567890,\n  \"image\": \"https://example.com/school-image.jpg\",\n  \"email_id\": \"info@abcschool.com\"\n}"
         },
         "description": "Creates a new school after validation."
       },
@@ -26,7 +26,7 @@
           "code": 201,
           "_postman_id": "example-add-201",
           "header": [],
-          "body": "{\n  \"success\": true,\n  \"message\": \"School added successfully\",\n  \"data\": { \"id\": 1, \"name\": \"ABC Public School\", \"address\": \"123 Main Street\", \"latitude\": 23.45, \"longitude\": 77.67 }\n}"
+          "body": "{\n  \"success\": true,\n  \"message\": \"School added successfully\",\n  \"data\": { \"id\": 1, \"name\": \"ABC Public School\", \"address\": \"123 Main Street\", \"latitude\": 23.45, \"longitude\": 77.67, \"city\": \"Bhopal\", \"state\": \"MP\", \"contact\": 1234567890, \"image\": \"https://example.com/school-image.jpg\", \"email_id\": \"info@abcschool.com\" }\n}"
         }
       ]
     },
@@ -56,6 +56,30 @@
           "_postman_id": "example-list-200",
           "header": [],
           "body": "{\n  \"success\": true,\n  \"message\": \"Schools sorted by proximity\",\n  \"data\": [\n    { \"id\": 1, \"name\": \"ABC Public School\", \"address\": \"123 Main Street\", \"latitude\": 23.45, \"longitude\": 77.67, \"distance\": 0 },\n    { \"id\": 2, \"name\": \"XYZ International School\", \"address\": \"456 Park Road\", \"latitude\": 23.5, \"longitude\": 77.7, \"distance\": 6.21 }\n  ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Show Schools",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/showSchools",
+          "host": ["{{baseUrl}}"],
+          "path": ["showSchools"]
+        },
+        "description": "Returns a list of schools with name, address, city, and image."
+      },
+      "response": [
+        {
+          "name": "200 OK",
+          "originalRequest": {},
+          "_postman_previewlanguage": "json",
+          "code": 200,
+          "_postman_id": "example-show-200",
+          "header": [],
+          "body": "{\n  \"success\": true,\n  \"message\": \"List of schools\",\n  \"data\": [\n    { \"id\": 1, \"name\": \"ABC Public School\", \"address\": \"123 Main Street\", \"city\": \"Bhopal\", \"image\": \"https://example.com/school-image.jpg\" },\n    { \"id\": 2, \"name\": \"XYZ International School\", \"address\": \"456 Park Road\", \"city\": \"Indore\", \"image\": \"https://example.com/xyz-image.jpg\" }\n  ]\n}"
         }
       ]
     }

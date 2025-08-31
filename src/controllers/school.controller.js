@@ -13,17 +13,29 @@ export const addSchool = async (req, res) => {
       });
     }
 
-    const { name, address, latitude, longitude } = value;
+    const { name, address, latitude, longitude, city, state, contact, image, email_id } = value;
 
     const [result] = await pool.execute(
-      'INSERT INTO schools (name, address, latitude, longitude) VALUES (?, ?, ?, ?)',
-      [name, address, latitude, longitude]
+      'INSERT INTO schools (name, address, latitude, longitude, city, state, contact, image, email_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      [name, address, latitude ?? null, longitude ?? null, city, state, contact, image, email_id]
     );
 
     return res.status(201).json({
       success: true,
+      statusCode: 201,
       message: 'School added successfully',
-      data: { id: result.insertId, name, address, latitude, longitude },
+      data: {
+        id: result.insertId,
+        name,
+        address,
+        latitude,
+        longitude,
+        city,
+        state,
+        contact,
+        image,
+        email_id,
+      },
     });
   } catch (err) {
     console.error('addSchool error:', err);
@@ -48,7 +60,8 @@ export const listSchools = async (req, res) => {
 
     const latitude = Number(value.latitude);
     const longitude = Number(value.longitude);
-    const limit = Number.parseInt(value.limit, 10);
+    const limit = Number.parseInt(value.limit, 10) || 10;
+    const safeLimit = Math.min(Math.max(limit, 1), 100);
 
     const sql = `
       SELECT
@@ -59,11 +72,13 @@ export const listSchools = async (req, res) => {
           SIN(RADIANS(?)) * SIN(RADIANS(latitude))
         )) AS distance
       FROM schools
+      WHERE latitude IS NOT NULL AND longitude IS NOT NULL
       ORDER BY distance ASC
       LIMIT ?;
     `;
 
-    const params = [latitude, longitude, latitude, limit];
+    const params = [latitude, longitude, latitude, safeLimit];
+
     const [rows] = await pool.execute(sql, params);
 
     return res.json({
@@ -73,6 +88,22 @@ export const listSchools = async (req, res) => {
     });
   } catch (err) {
     console.error('listSchools error:', err);
+    return res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+};
+
+/** GET /showSchools */
+export const showSchools = async (req, res) => {
+  try {
+    const [rows] = await pool.execute('SELECT id, name, address, city, image FROM schools');
+
+    return res.json({
+      success: true,
+      message: 'List of schools',
+      data: rows,
+    });
+  } catch (err) {
+    console.error('showSchools error:', err);
     return res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };
