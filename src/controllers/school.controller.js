@@ -60,8 +60,8 @@ export const listSchools = async (req, res) => {
 
     const latitude = Number(value.latitude);
     const longitude = Number(value.longitude);
-    const limit = Number.parseInt(value.limit, 10) || 10;
-    const safeLimit = Math.min(Math.max(limit, 1), 100);
+    const limit = Number.parseInt(value.limit, 10) || 100;
+    const safeLimit = Math.min(Math.max(limit, 1), 1000);
 
     const sql = `
       SELECT
@@ -74,10 +74,10 @@ export const listSchools = async (req, res) => {
       FROM schools
       WHERE latitude IS NOT NULL AND longitude IS NOT NULL
       ORDER BY distance ASC
-      LIMIT ?;
+      LIMIT ${safeLimit};
     `;
 
-    const params = [latitude, longitude, latitude, safeLimit];
+    const params = [latitude, longitude, latitude];
 
     const [rows] = await pool.execute(sql, params);
 

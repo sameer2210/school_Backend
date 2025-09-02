@@ -7,7 +7,7 @@ import schoolRoutes from './routes/school.routes.js';
 
 const app = express();
 
-app.use(cors());
+app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(helmet());
 app.use(express.json());
 app.use(morgan('dev'));
